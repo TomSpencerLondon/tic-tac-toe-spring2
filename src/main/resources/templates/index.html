@@ -9,38 +9,97 @@
   >
 </head>
 <body>
-  <main class="pt-8 text-center">
-   <h1 class="mb-8 text-3xl font-bold uppercase">Tic Tac Toe</h1>
+<main class="pt-8 text-center">
+  <h1 class="mb-8 text-3xl font-bold uppercase">Tic Tac Toe</h1>
 
-    <div class="grid grid-cols-3 mx-auto w-64 border-black border-solid border-2">
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">X</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">X</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">X</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">O</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">O</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">O</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">O</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">X</span>
-      </div>
-      <div class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-        <span class="font-extrabold flex items-center justify-center text-3xl">X</span>
-      </div>
+  <div class="grid grid-cols-3 mx-auto w-64 border-black border-solid border-2">
+    <div id="square_1" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
     </div>
-  </main>
+    <div id="square_2" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_3" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_4" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_5" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_6" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_7" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_8" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+    <div id="square_9" data-square-value=""
+         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
+      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    </div>
+  </div>
+</main>
+<script>
+  for (let i = 1; i <= 9; i++) {
+    var square = document.getElementById("square_" + i);
+    square.addEventListener("click", function (event) {
+      selectSquare(event);
+    }, { once: true });
+  }
+
+  function splitSquares(squares) {
+    var splitSquares = [];
+    while (squares.length > 0) {
+      splitSquares.push(squares.splice(0, 3))
+    }
+
+    return splitSquares;
+  }
+
+  function getSquares() {
+    var squares = [];
+    for (let i = 1; i <= 9; i++) {
+      var square = document.getElementById("square_" + i);
+      squares.push(square.getAttribute("data-square-value"));
+    }
+    return squares;
+  }
+
+  function selectSquare(event) {
+    var currentSquare = document.getElementById(event.target.id);
+    currentSquare.setAttribute("data-square-value", "X");
+    var board = splitSquares(getSquares());
+
+    fetch(`/api/add-square`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({board})
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.board.flat());
+      data.board.flat().forEach((value, index) => {
+        var square = document.getElementById("square_" + (index + 1));
+        var span = square.getElementsByTagName('span')[0];
+        span.innerText = value;
+      })
+    })
+  }
+
+</script>
 </body>
 </html>
