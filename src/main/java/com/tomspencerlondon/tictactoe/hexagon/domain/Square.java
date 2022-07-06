@@ -1,12 +1,19 @@
 package com.tomspencerlondon.tictactoe.hexagon.domain;
 
 public class Square {
+
+  private String player;
   private final int x;
   private final int y;
 
-  public Square(int x, int y) {
+  public Square(String player, int x, int y) {
+    this.player = player;
     this.x = x;
     this.y = y;
+  }
+
+  public String player() {
+    return player;
   }
 
   @Override
