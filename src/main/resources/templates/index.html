@@ -50,7 +50,7 @@
       <span class="font-extrabold flex items-center justify-center text-3xl"></span>
     </div>
   </div>
-  <h2 id="result" class="mt-8 text-2xl font-bold uppercase">Game on!</h2>
+  <h2 id="result" data-game-state="" class="mt-8 text-2xl font-bold uppercase">Game on!</h2>
 </main>
 <script>
   for (let i = 1; i <= 9; i++) {
@@ -80,13 +80,18 @@
 
   function selectSquare(event) {
     var currentSquare = document.getElementById(event.target.id);
+    var result = document.getElementById("result");
+    var gameOn = result.getAttribute("data-game-state");
     if (currentSquare === null || currentSquare.getAttribute("data-square-value") !== "") {
+      return;
+    } else if (gameOn.toLowerCase() === "false"){
+      console.log(gameOn);
       return;
     }
 
     currentSquare.setAttribute("data-square-value", "X");
     var board = splitSquares(getSquares());
-
+§
     fetch(`/api/add-square`, {
       method: 'POST',
       headers: {
@@ -105,6 +110,9 @@
 
       var result = document.getElementById("result");
       result.innerText = data.state;
+      console.log(data);
+      console.log(data.gameOn);
+      result.setAttribute("data-game-state", data.gameOn);
     })
   }
 

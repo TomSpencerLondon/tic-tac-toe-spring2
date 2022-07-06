@@ -7,9 +7,11 @@ public class ResultDto {
 
   private String[][] board;
   private String state;
+  private boolean gameOn;
 
-  public ResultDto(String[][] board, State state) {
+  public ResultDto(String[][] board, State state, boolean gameOn) {
     this.board = board;
+    this.gameOn = gameOn;
 
     switch (state) {
       case DRAW -> {
@@ -23,12 +25,13 @@ public class ResultDto {
       }
       default -> {
         this.state = "Game On!";
+        this.gameOn = true;
       }
     }
   }
 
   public static ResultDto from(Result result) {
-    return new ResultDto(result.board(), result.state());
+    return new ResultDto(result.board(), result.state(), false);
   }
 
   public String[][] getBoard() {
@@ -37,5 +40,9 @@ public class ResultDto {
 
   public String getState() {
     return state;
+  }
+
+  public boolean isGameOn() {
+    return gameOn;
   }
 }
