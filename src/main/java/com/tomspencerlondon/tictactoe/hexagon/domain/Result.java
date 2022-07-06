@@ -4,6 +4,7 @@ import static com.tomspencerlondon.tictactoe.hexagon.domain.State.DRAW;
 import static com.tomspencerlondon.tictactoe.hexagon.domain.State.GAME_ON;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Result {
@@ -29,13 +30,9 @@ public class Result {
   }
 
   private boolean isDraw() {
-    for (String[] line : board) {
-      for (String square : line) {
-        if (square.isEmpty()) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return Arrays.stream(board)
+        .flatMap(Arrays::stream)
+        .anyMatch(Predicate.not(String::isEmpty));
+
   }
 }
