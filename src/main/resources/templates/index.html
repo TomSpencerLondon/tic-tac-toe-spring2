@@ -56,7 +56,7 @@
     var square = document.getElementById("square_" + i);
     square.addEventListener("click", function (event) {
       selectSquare(event);
-    }, { once: true });
+    });
   }
 
   function splitSquares(squares) {
@@ -79,6 +79,10 @@
 
   function selectSquare(event) {
     var currentSquare = document.getElementById(event.target.id);
+    if (currentSquare === null || currentSquare.getAttribute("data-square-value") !== "") {
+      return;
+    }
+
     currentSquare.setAttribute("data-square-value", "X");
     var board = splitSquares(getSquares());
 
@@ -91,10 +95,10 @@
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data.board.flat());
       data.board.flat().forEach((value, index) => {
         var square = document.getElementById("square_" + (index + 1));
         var span = square.getElementsByTagName('span')[0];
+        square.setAttribute("data-square-value", value);
         span.innerText = value;
       })
     })
