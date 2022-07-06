@@ -39,9 +39,10 @@ public class Result {
       Random random = new Random();
       int x = random.nextInt(3);
       int y = random.nextInt(3);
-      Square square = new Square(board[x][y], x, y);
+      Square square = new Square("O", x, y);
       if (!takenSquares.contains(square)) {
         board[x][y] = "O";
+        takenSquares.add(square);
         break;
       }
     }

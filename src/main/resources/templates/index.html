@@ -50,6 +50,7 @@
       <span class="font-extrabold flex items-center justify-center text-3xl"></span>
     </div>
   </div>
+  <h2 id="result" class="mt-8 text-2xl font-bold uppercase">Game on!</h2>
 </main>
 <script>
   for (let i = 1; i <= 9; i++) {
@@ -101,6 +102,9 @@
         square.setAttribute("data-square-value", value);
         span.innerText = value;
       })
+
+      var result = document.getElementById("result");
+      result.innerText = data.state;
     })
   }
 
