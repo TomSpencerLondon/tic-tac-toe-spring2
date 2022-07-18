@@ -1,13 +1,22 @@
 package com.tomspencerlondon.tictactoe.adapter.in.api;
 
 public class CreateSquareParameters {
-  private String[][] board;
+  private int x;
+  private int y;
 
-  public String[][] getBoard() {
-    return board;
+  public int getX() {
+    return x;
   }
 
-  public void setBoard(String[][] board) {
-    this.board = board;
+  public void setX(int x) {
+    this.x = x;
+  }
+
+  public int getY() {
+    return y;
+  }
+
+  public void setY(int y) {
+    this.y = y;
   }
 }

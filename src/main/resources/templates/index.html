@@ -3,118 +3,70 @@
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
 <head>
-  <link rel="stylesheet"
-        th:href="@{/css/tailwind.css}"
-        href="../../../../target/classes/static/css/tailwind.css"
-  >
+    <link rel="stylesheet"
+          th:href="@{/css/application.css}"
+          href="../../../../target/classes/static/css/application.css"
+    >
 </head>
 <body>
 <main class="pt-8 text-center">
-  <h1 class="mb-8 text-3xl font-bold uppercase">Tic Tac Toe</h1>
+    <h1 class="mb-8 text-3xl font-bold uppercase">Tic Tac Toe</h1>
 
-  <div class="grid grid-cols-3 mx-auto w-64 border-black border-solid border-2">
-    <div id="square_1" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
+    <div class="grid grid-cols-3 mx-auto w-64 border-black border-solid border-2">
+        <div th:each="row : ${board.squares}">
+            <div th:each="square : ${row}">
+                <div th:replace="fragments :: square(${square.position.x}, ${square.position.y}, ${square.player})"></div>
+            </div>
+        </div>
     </div>
-    <div id="square_2" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_3" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_4" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_5" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_6" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_7" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_8" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-    <div id="square_9" data-square-value=""
-         class="h-24 border-solid border-2 border-black text-center flex justify-center align-middle cursor-pointer">
-      <span class="font-extrabold flex items-center justify-center text-3xl"></span>
-    </div>
-  </div>
-  <h2 id="result" data-game-state="" class="mt-8 text-2xl font-bold uppercase">Game on!</h2>
+    <h2 id="result" data-game-state="" class="mt-8 text-2xl font-bold uppercase" th:text="${state}">Game on!</h2>
 </main>
 <script>
-  for (let i = 1; i <= 9; i++) {
-    var square = document.getElementById("square_" + i);
-    square.addEventListener("click", function (event) {
-      selectSquare(event);
-    });
-  }
+    function splitSquares(squares) {
+        var splitSquares = [];
+        while (squares.length > 0) {
+            splitSquares.push(squares.splice(0, 3));
+        }
 
-  function splitSquares(squares) {
-    var splitSquares = [];
-    while (squares.length > 0) {
-      splitSquares.push(squares.splice(0, 3))
+        return splitSquares;
     }
 
-    return splitSquares;
-  }
-
-  function getSquares() {
-    var squares = [];
-    for (let i = 1; i <= 9; i++) {
-      var square = document.getElementById("square_" + i);
-      squares.push(square.getAttribute("data-square-value"));
-    }
-    return squares;
-  }
-
-  function selectSquare(event) {
-    var currentSquare = document.getElementById(event.target.id);
-    var result = document.getElementById("result");
-    var gameOn = result.getAttribute("data-game-state");
-    if (currentSquare === null || currentSquare.getAttribute("data-square-value") !== "") {
-      return;
-    } else if (gameOn.toLowerCase() === "false"){
-      console.log(gameOn);
-      return;
+    function getSquares() {
+        var squares = [];
+        for (let i = 1; i <= 9; i++) {
+            var square = document.getElementById('square_' + i);
+            squares.push(square.getAttribute('data-square-value'));
+        }
+        return squares;
     }
 
-    currentSquare.setAttribute("data-square-value", "X");
-    var board = splitSquares(getSquares());
-§
-    fetch(`/api/add-square`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({board})
-    })
-    .then(response => response.json())
-    .then(data => {
-      data.board.flat().forEach((value, index) => {
-        var square = document.getElementById("square_" + (index + 1));
-        var span = square.getElementsByTagName('span')[0];
-        square.setAttribute("data-square-value", value);
-        span.innerText = value;
-      })
+    function selectSquare(event) {
+        console.log('clicked!')
+        var currentSquare = event.target;
 
-      var result = document.getElementById("result");
-      result.innerText = data.state;
-      console.log(data);
-      console.log(data.gameOn);
-      result.setAttribute("data-game-state", data.gameOn);
-    })
-  }
+        position = {
+            'x': currentSquare.getAttribute('data-x'),
+            'y': currentSquare.getAttribute('data-y')
+        };
+
+        fetch(`/api/add-square`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(position)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.board.squares.forEach(row => {
+                    row.forEach( square => {
+                        const el = document.getElementById('square_' + square.x + '_' + square.y);
+                        el.firstElementChild.innerText = square.player === 'PLAYER_1' ? 'X' : (square.player === 'PLAYER_2' ? 'O' : '')
+                    })
+                })
+            });
+    }
 
 </script>
 </body>

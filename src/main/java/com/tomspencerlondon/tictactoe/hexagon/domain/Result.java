@@ -39,7 +39,7 @@ public class Result {
       Random random = new Random();
       int x = random.nextInt(3);
       int y = random.nextInt(3);
-      Square square = new Square("O", x, y);
+      Square square = null;//new Square("O", x, y);
       if (!takenSquares.contains(square)) {
         board[x][y] = "O";
         takenSquares.add(square);
@@ -72,14 +72,14 @@ public class Result {
 
   private Stream<Stream<Square>> winningCombinations(String player) {
     return Stream.of(
-        Stream.of(new Square(player, 0, 0), new Square(player, 0, 1), new Square(player, 0, 2)),
-        Stream.of(new Square(player, 1, 0), new Square(player, 1, 1), new Square(player, 1, 2)),
-        Stream.of(new Square(player, 2, 0), new Square(player, 2, 1), new Square(player, 2, 2)),
-        Stream.of(new Square(player, 0, 0), new Square(player, 1, 0), new Square(player, 2, 0)),
-        Stream.of(new Square(player, 0, 1), new Square(player, 1, 1), new Square(player, 2, 1)),
-        Stream.of(new Square(player, 0, 2), new Square(player, 1, 2), new Square(player, 2, 2)),
-        Stream.of(new Square(player, 0, 0), new Square(player, 1, 1), new Square(player, 2, 2)),
-        Stream.of(new Square(player, 0, 2), new Square(player, 1, 1), new Square(player, 2, 0))
+//        Stream.of(new Square(player, 0, 0), new Square(player, 0, 1), new Square(player, 0, 2)),
+//        Stream.of(new Square(player, 1, 0), new Square(player, 1, 1), new Square(player, 1, 2)),
+//        Stream.of(new Square(player, 2, 0), new Square(player, 2, 1), new Square(player, 2, 2)),
+//        Stream.of(new Square(player, 0, 0), new Square(player, 1, 0), new Square(player, 2, 0)),
+//        Stream.of(new Square(player, 0, 1), new Square(player, 1, 1), new Square(player, 2, 1)),
+//        Stream.of(new Square(player, 0, 2), new Square(player, 1, 2), new Square(player, 2, 2)),
+//        Stream.of(new Square(player, 0, 0), new Square(player, 1, 1), new Square(player, 2, 2)),
+//        Stream.of(new Square(player, 0, 2), new Square(player, 1, 1), new Square(player, 2, 0))
     );
   }
 
